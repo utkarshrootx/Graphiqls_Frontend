@@ -17,12 +17,13 @@ function App() {
           <div className="col-sm-12">
             <NavbarComponent />
             <a href="/">
-              <img
-                style={{ height: "100px", margin: "10px 0" }}
-                src="https://www.phuketinternationalhospital.com/en/wp-content/themes/pih/images/logo-nonetext.png"
-                alt=""
-              />
-            </a>
+  <img
+    style={{ height: "40px", margin: "10px 0" }}
+    src={`${process.env.PUBLIC_URL}/graphiqls-high-resolution-logo-transparent.png`}
+    alt="Logo"
+  />
+</a>
+
             <BrowserRouter>
               <Switch>
                 <Route path="/" exact component={ListPatientComponent} />

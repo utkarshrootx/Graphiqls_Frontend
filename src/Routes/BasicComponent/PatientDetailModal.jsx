@@ -6,11 +6,11 @@ class PatientDetailModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            patientid: props.patient.patientid,
+            patient_id: props.patient.patient_id,
             name: props.patient.name,
             lastname: props.patient.lastname,
             email: props.patient.email,
-            phoneNo: props.patient.phoneNo,
+            phone: props.patient.phone,
             bornDate: props.patient.bornDate,
             gender: props.patient.gender,
             city: props.patient.city,
@@ -39,10 +39,10 @@ class PatientDetailModal extends Component {
                                 <div className="card" >
                                     <div className="card-header"> <h3>{this.props.patient.name} {this.props.patient.lastname}</h3></div>
                                     <ul className="text-left list-group list-group-flush">
-                                        <li className="list-group-item"><b>Patient id : </b>{this.props.patient.patientid}</li>
+                                        <li className="list-group-item"><b>Patient id : </b>{this.props.patient.patient_id}</li>
                                         <li className="list-group-item"><b>Name : </b>{this.props.patient.name}</li>
                                         <li className="list-group-item"><b>Last Name : </b>{this.props.patient.lastname}</li>
-                                        <li className="list-group-item"><b>Phne No : </b>{this.props.patient.phoneNo}</li>
+                                        <li className="list-group-item"><b>Phne No : </b>{this.props.patient.phone}</li>
                                         <li className="list-group-item"><b>Age : </b>
                                             {age !== null ? age : null}
                                         </li>

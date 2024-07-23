@@ -19,8 +19,43 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css" />
     <title>React App</title>
+    <style>
+      body {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh; /* Use min-height instead of height */
+  overflow: auto;
+}
+
+body::before {
+  content: "";
+  position: fixed; /* Change to fixed */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('./online-marketing-hIgeoQjS_iE-unsplash.jpg');
+  background-size: cover;
+  background-repeat: no-repeat; /* Change to no-repeat */
+  background-attachment: fixed; /* Ensure background is fixed */
+  filter: blur(10px); /* Add blur effect */
+  z-index: -1;
+  pointer-events: none; /* Ensure the background does not interfere with content interaction */
+}
+
+.content {
+  position: relative;
+  z-index: 1; /* Ensure content is above the background */
+}
+
+      #root {
+          position: relative;
+          z-index: 1;
+      }
+  </style>
   </head>
-  <body  style="background-color: #ffffef;">
+  <body  >
      
     <div id="root"></div>
  
