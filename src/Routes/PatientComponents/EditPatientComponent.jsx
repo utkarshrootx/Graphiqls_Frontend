@@ -1,26 +1,68 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "alertifyjs/build/css/alertify.css";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import * as alertify from "alertifyjs";
 
 const EditPatientComponent = (props) => {
   const [patientData, setPatientData] = useState({
-    patientid: "",
+    patient_id: "",
     name: "",
-    lastname: "",
-    phoneNo: "",
+    age: "",
+    address: "",
+    phone: "",
     email: "",
+    medical_history: "",
+    current_medication: "",
+    doctor_assigned: "",
     gender: "Male",
-    bornDate: null,
-    city: "Ankara",
-    status: 1,
-    cities: [],
   });
 
-  const editPatient = (e) => {
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      const patientId = window.localStorage.getItem("patientId");
+      if (patientId) {
+        try {
+          const response = await fetch(`https://adt101.pythonanywhere.com/patients/${patientId}`, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          if (response.ok) {
+            const data = await response.json();
+            setPatientData(data);
+          } else {
+            alertify.error("Failed to fetch patient data.");
+          }
+        } catch (error) {
+          console.error("Error fetching patient data:", error);
+          alertify.error("An error occurred. Please try again later.");
+        }
+      }
+    };
+
+    fetchPatientData();
+  }, []);
+
+  const editPatient = async (e) => {
     e.preventDefault();
-    let patient = patientData;
-    patient["patientid"] = window.localStorage.getItem("patientId");
+    const patientId = window.localStorage.getItem("patientId");
+    try {
+      const response = await fetch(`https://adt101.pythonanywhere.com/edit_patient/${patientId}`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(patientData)
+      });
+
+      if (response.ok) {
+        alertify.success("Patient updated successfully.");
+      } else {
+        alertify.error("Failed to update patient.");
+      }
+    } catch (error) {
+      console.error("Error updating patient:", error);
+      alertify.error("An error occurred. Please try again later.");
+    }
   };
 
   const onChangeData = (type, data) => {
@@ -30,16 +72,7 @@ const EditPatientComponent = (props) => {
     }));
   };
 
-  let bornDate = new Date();
-  if (patientData.bornDate !== null)
-    bornDate = new Date(patientData.bornDate.toString());
-
-  const isWeekday = (date) => {
-    const day = date.getDay();
-    return day !== 0 && day !== 6;
-  };
-
-  let { name, lastname, phoneNo, email, gender, city, cities } = patientData;
+  let { name, age, address, phone, email, medical_history, current_medication, doctor_assigned, gender } = patientData;
 
   return (
     <div className="row">
@@ -48,10 +81,10 @@ const EditPatientComponent = (props) => {
         <hr />
         <form>
           <div className="form-group">
-            <label>User Name:</label>
+            <label>Name:</label>
             <input
               type="text"
-              placeholder="name"
+              placeholder="Name"
               name="name"
               className="form-control"
               value={name}
@@ -59,25 +92,36 @@ const EditPatientComponent = (props) => {
             />
           </div>
           <div className="form-group">
-            <label>Last Name:</label>
+            <label>Age:</label>
             <input
-              type="text"
-              placeholder="Last name"
-              name="lastname"
+              type="number"
+              placeholder="Age"
+              name="age"
               className="form-control"
-              value={lastname}
-              onChange={(e) => onChangeData("lastname", e.target.value)}
+              value={age}
+              onChange={(e) => onChangeData("age", e.target.value)}
             />
           </div>
           <div className="form-group">
-            <label>Phone No:</label>
+            <label>Address:</label>
             <input
               type="text"
-              placeholder="phone No"
-              name="phoneNo"
+              placeholder="Address"
+              name="address"
               className="form-control"
-              value={phoneNo}
-              onChange={(e) => onChangeData("phoneNo", e.target.value)}
+              value={address}
+              onChange={(e) => onChangeData("address", e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Phone:</label>
+            <input
+              type="text"
+              placeholder="Phone"
+              name="phone"
+              className="form-control"
+              value={phone}
+              onChange={(e) => onChangeData("phone", e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -92,43 +136,47 @@ const EditPatientComponent = (props) => {
             />
           </div>
           <div className="form-group">
-            <label>Born Date:</label>
-            {bornDate !== null ? (
-              <div className="form-group">
-                <DatePicker
-                  className="form-control"
-                  showTimeInput
-                  selected={bornDate}
-                  onChange={(e) => onChangeData("bornDate", e)}
-                  filterDate={isWeekday}
-                  timeIntervals={15}
-                  timeFormat="HH:mm"
-                  dateFormat="yyyy/MM/dd h:mm aa"
-                />
-              </div>
-            ) : null}
+            <label>Medical History:</label>
+            <input
+              type="text"
+              placeholder="Medical History"
+              name="medical_history"
+              className="form-control"
+              value={medical_history}
+              onChange={(e) => onChangeData("medical_history", e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Current Medication:</label>
+            <input
+              type="text"
+              placeholder="Current Medication"
+              name="current_medication"
+              className="form-control"
+              value={current_medication}
+              onChange={(e) => onChangeData("current_medication", e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label>Doctor Assigned:</label>
+            <input
+              type="text"
+              placeholder="Doctor Assigned"
+              name="doctor_assigned"
+              className="form-control"
+              value={doctor_assigned}
+              onChange={(e) => onChangeData("doctor_assigned", e.target.value)}
+            />
           </div>
           <div className="form-group">
             <label>Gender:</label>
             <select
               className="form-control"
               value={gender}
-              onChange={(e) => onChangeData("gender", e.target.value)}>
+              onChange={(e) => onChangeData("gender", e.target.value)}
+            >
               <option value="Male">Male</option>
               <option value="Female">Female</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label>City:</label>
-            <select
-              className="form-control"
-              value={city}
-              onChange={(e) => onChangeData("city", e.target.value)}>
-              {cities.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
             </select>
           </div>
           <button className="btn btn-success" onClick={editPatient}>
@@ -141,7 +189,7 @@ const EditPatientComponent = (props) => {
         <img
           style={{ margin: "20px 0", height: 300 }}
           src="https://www.shareicon.net/data/512x512/2016/02/26/725010_document_512x512.png"
-          alt=""
+          alt="Document"
         />
       </div>
       <div className="col-sm-12">
