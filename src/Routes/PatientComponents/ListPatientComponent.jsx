@@ -19,7 +19,7 @@ const ListPatientComponent = (props) => {
   useEffect(() => {
     const fetchPatients = async () => {
       try {
-        const response = await fetch("https://adt101.pythonanywhere.com/patients", {
+        const response = await fetch("http://127.0.0.1:5000//patients", {
           mode: 'cors', 
           headers: {
             'Content-Type': 'application/json'
@@ -33,9 +33,9 @@ const ListPatientComponent = (props) => {
         const data = await response.json();
         console.log("Fetched data:", data); 
 
-        if (data.patients && Array.isArray(data.patients)) {
-          setPatients(data.patients);
-          console.log("Patients length:", data.patients.length);
+        if (data&& Array.isArray(data)) {
+          setPatients(data);
+          // console.log("Patients length:", data.patients.length);
         } else {
           console.error("Unexpected data format:", data);
         }
@@ -47,6 +47,8 @@ const ListPatientComponent = (props) => {
 
     fetchPatients();
   }, []);
+
+  console.log("data13 " , patients)
 
   const handleViewPatient = (patient) => {
     console.log("Viewing patient:", patient);
@@ -66,11 +68,9 @@ const ListPatientComponent = (props) => {
   };
 
   const handlePatientSelect = (patientId) => {
-    const mappedId = mapPatientId(patientId);
-    setSelectedPatientId(mappedId);
-    const body = JSON.stringify({ patient_id: mappedId });
+    const body = JSON.stringify({ patient_id: patientId });
 
-    fetch("https://your-api-endpoint.com/endpoint", {
+    fetch("http://127.0.0.1:5000/patient-graph", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -129,7 +129,7 @@ const ListPatientComponent = (props) => {
               <button
                 key={patient.patient_id}
                 className="dropdown-item"
-                onClick={() => handlePatientSelect(patient.patient_id)}
+                onClick={() => handlePatientSelect(patient.id)}
               >
                 {patient.name}
               </button>
@@ -161,26 +161,26 @@ const ListPatientComponent = (props) => {
               <tr>
                 <th>Patient ID</th>
                 <th>Full Name</th>
-                <th>Email</th>
-                <th>Address</th>
+                <th>Diagnosis</th>
+                <th>Treatment</th>
                 <th>Age</th>
                 {/* <th>Action</th> */}
               </tr>
             </thead>
             <tbody>
-              {patients.length > 0 ? (
-                patients.map((patient) => (
+              {patients?.length > 0 ? (
+                patients?.map((patient) => (
                   <tr
                     className={
                       patient.gender === "Male" ? "bg-default" : "bg-danger"
                     }
                     key={patient.patient_id}
                   >
-                    <td>{patient.patient_id}</td>
-                    <td>{patient.name}</td>
-                    <td>{patient.email}</td>
-                    <td>{patient.address}</td>
-                    <td>{patient.age}</td>
+                    <td>{patient?.id}</td>
+                    <td>{patient?.name}</td>
+                    <td>{patient?.diagnosis}</td>
+                    <td>{patient?.treatment}</td>
+                    <td>{patient?.age}</td>
                     {/* <td>
                       <div className="btn-group" role="group">
                         <button

@@ -5,10 +5,10 @@ import alertify from "alertifyjs";
 
 const AddPatientComponent = (props) => {
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [treatment, settreatment] = useState("");
   const [phoneNo, setPhoneNo] = useState("");
   const [gender, setGender] = useState("Male");
-  const [address, setAddress] = useState("");
+  const [diagnosis, setdiagnosis] = useState("");
   const [age, setAge] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
   const [currentMedication, setCurrentMedication] = useState("");
@@ -20,12 +20,12 @@ const AddPatientComponent = (props) => {
       name.trim() === "" ||
       !phoneNo ||
       phoneNo.trim() === "" ||
-      !address ||
-      address.trim() === "" ||
+      !diagnosis ||
+      diagnosis.trim() === "" ||
       !age ||
       age.trim() === "" ||
-      !email ||
-      email.trim() === "" ||
+      !treatment ||
+      treatment.trim() === "" ||
       !medicalHistory ||
       medicalHistory.trim() === "" ||
       !currentMedication ||
@@ -42,15 +42,15 @@ const AddPatientComponent = (props) => {
         name,
         age: parseInt(age, 10),
         gender,
-        address,
+        diagnosis,
         phone: phoneNo,
-        email,
+        treatment,
         medical_history: medicalHistory,
         current_medication: currentMedication,
         doctor_assigned: doctorAssigned,
       };
 
-      axios.post("https://adt101.pythonanywhere.com/add_patient", patient)
+      axios.post("http://127.0.0.1:5000/patients", patient)
         .then((res) => {
           alertify.success("User added successfully.");
           props.history.push("/patients");
@@ -108,14 +108,14 @@ const AddPatientComponent = (props) => {
             />
           </div>
           <div className="form-group">
-            <label>Address *</label>
+            <label>Diagnosis *</label>
             <input
               type="text"
-              placeholder="address"
-              name="address"
+              placeholder="diagnosis"
+              name="diagnosis"
               className="form-control"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
+              value={diagnosis}
+              onChange={(e) => setdiagnosis(e.target.value)}
             />
           </div>
           <div className="form-group">
@@ -129,13 +129,13 @@ const AddPatientComponent = (props) => {
             />
           </div>
           <div className="form-group">
-            <label>Email *</label>
+            <label>Treatment *</label>
             <input
-              placeholder="Email"
-              name="email"
+              placeholder="treatment"
+              name="treatment"
               className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={treatment}
+              onChange={(e) => settreatment(e.target.value)}
             />
           </div>
           <div className="form-group">
